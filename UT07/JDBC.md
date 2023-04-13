@@ -121,7 +121,7 @@ Para empezar, primero debe cargar el controlador o registrarlo antes de usarlo e
 
 Puede registrar un controlador de una de las dos formas que se mencionan a continuación de la siguiente manera: 
 
-#### A) `Class.forName()`
+#### A) `Class.forName()`
 
 Aquí cargamos el archivo de clase del controlador en la memoria en tiempo de ejecución. No es necesario utilizar objetos nuevos o creados. En el ejemplo siguiente se utiliza Class.forName() para cargar el controlador de Oracle como se muestra a continuación de la siguiente manera:
 
