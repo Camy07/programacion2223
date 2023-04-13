@@ -6,6 +6,8 @@ Este capítulo cubre los conceptos básicos del uso de JDBC para trabajar con ba
 
 ## Instalación de MYSQL
 
+Damos por hecho que MySQL está instalado en el equipo, si no es asi, procedemos a instalarlo.
+
 ## Creación de la base de datos de muestra
 
 En primer lugar, definimos una base de datos simple llamada apressBooks con dos tablas:  Recipes y publications. El diseño lógico de la base de datos se muestra en la Tabla 12-1 y la Tabla 12-2, caracterizado por el nombre, la longitud, el tipo de datos y las restricciones (es decir, un campo es una clave primaria y otro no debe ser nulo).
@@ -77,7 +79,7 @@ FLUSH PRIVILEGES;
 
 ## Pasos para la conectividad entre el programa Java y la base de datos
 
-1. Importar los paquetes
+### 1. Importar los paquetes
 
 Para la conexión de Java con la base de datos usamos un objeto de conexión JDBC para obtener la conexión. 
 
@@ -109,14 +111,60 @@ A continuación, seguimos los siguientes pasos para usar una clase JDBC DriverMa
 
 Analicemos estos pasos brevemente antes de implementarlos escribiendo código adecuado para ilustrar los pasos de conectividad para JDBC.
 
-Paso 2: Carga de los controladores
+### Paso 2: Carga de los controladores
 
-Para empezar, primero debe cargar el controlador o registrarlo antes de usarlo en el programa. El registro debe hacerse una vez en su programa. Puede registrar un controlador de una de las dos formas que se mencionan a continuación de la siguiente manera:
+Para empezar, primero debe cargar el controlador o registrarlo antes de usarlo en el programa. El registro debe hacerse una vez en su programa. 
 
-`Class.forName()
+Puede registrar un controlador de una de las dos formas que se mencionan a continuación de la siguiente manera: 
+
+#### A) `Class.forName()`
+
+Aquí cargamos el archivo de clase del controlador en la memoria en tiempo de ejecución. No es necesario utilizar objetos nuevos o creados. En el ejemplo siguiente se utiliza Class.forName() para cargar el controlador de Oracle como se muestra a continuación de la siguiente manera:
+
+`Class.forName(“oracle.jdbc.driver.OracleDriver”);`
+
+#### B) `DriverManager.registerDriver()`
+DriverManager es una clase incorporada de Java con un registro de miembro estático. Aquí llamamos al constructor de la clase driver en tiempo de compilación. En el ejemplo siguiente se utiliza DriverManager.registerDriver() para registrar el controlador de Oracle como se muestra a continuación:
+
+`DriverManager.registerDriver(new oracle.jdbc.driver.OracleDriver())`
+
+### Paso 3: Establecer una conexión mediante el objeto de clase Connection
+
+Después de cargar el controlador, establezca las conexiones como se muestra a continuación de la siguiente manera:
+
+`Connection con = DriverManager.getConnection(url,user,password)`
+
+Los elementos de esta instrucción son:
+
+- **user**: Username desde el que se puede acceder a su símbolo del sistema SQL.
+- **password**: contraseña desde la que se puede acceder al símbolo del sistema SQL.
+- **con**: Es una referencia a la interfaz de conexión.
+- **Url**: Localizador uniforme de recursos que se crea como se muestra a continuación:
+`String url = “ jdbc:oracle:thin:@localhost:1521:xe”`
+
+Donde oracle es la base de datos utilizada, thin es el controlador utilizado, @localhost es la dirección IP donde se almacena una base de datos, 1521 es el número de puerto y xe es el proveedor de servicios. Los 3 parámetros anteriores son de tipo String y deben ser declarados por el programador antes de llamar a la función. El uso de esto puede ser referido para formar el código final.
+
+### Paso 4: Crear una instrucción
+
+Una vez que se establece una conexión, podemos interactuar con la base de datos. Las interfaces JDBCStatement, CallableStatement y PreparedStatement definen los métodos que permiten enviar comandos SQL y recibir datos de la base de datos.
+El uso de la instrucción JDBC es el siguiente:
+
+`Statement st = con.createStatement();`
+
+### Paso 5: Ejecutar la consulta
+
+Ahora viene la parte más importante, es decir, ejecutar la consulta. La consulta aquí es una consulta SQL. Ahora sabemos que podemos tener múltiples tipos de consultas. Algunos de ellos son los siguientes:
+
+- Consulta para actualizar o insertar una tabla en una base de datos.
+- Consulta para recuperar datos.
+
+El método executeQuery() de la interfaz Statement se utiliza para ejecutar consultas de recuperación de valores de la base de datos. Este método devuelve el objeto de ResultSet que se puede utilizar para obtener todos los registros de una tabla.
+
+El método executeUpdate(sql query) de la interfaz Statement se utiliza para ejecutar consultas de actualización/inserción.
 
 
-El código quedaría así:
+### Código:
+Con todo lo visto anteriormente, el código quedaría así:
 
 ```java
 import java.io.*;
