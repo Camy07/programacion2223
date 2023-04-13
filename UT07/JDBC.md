@@ -1,12 +1,3 @@
----
-title: JDBC
-updated: 2023-04-13 06:43:47Z
-created: 2023-04-12 15:52:52Z
-latitude: 37.99223990
-longitude: -1.13065440
-altitude: 0.0000
----
-
 Una base de datos consiste en datos organizados; es decir, los datos en sí y un esquema que proporciona estructuras de datos. Hoy en día, la mayoría de las bases de datos están organizadas en tablas que consisten en filas y columnas. Esta es una forma natural de organizar los datos, y probablemente estés familiarizado con ellos a través del uso de hojas de cálculo. Puede definir las características de la tabla independientemente de los datos reales que va a almacenar en ella. Un campo es un elemento de datos individual dentro de una tabla que corresponde a la intersección de una fila y una columna. Se pueden especificar una o más columnas como claves únicas para identificar a cada empleado. Para este propósito, puede usar una de las columnas mencionadas anteriormente o la combinación de nombre, apellido y fecha de nacimiento. La clave única utilizada  preferentemente sobre las demás se llama la clave principal o primaria de una tabla.
 
 Casi cualquier aplicación no trivial contiene algún tipo de base de datos. Algunas aplicaciones utilizan una base de datos en memoria, mientras que otras utilizan un sistema tradicional de gestión de bases de datos relacionales (RDBMS). En cualquier caso, es esencial que todos los desarrolladores de Java tengan algunas habilidades para trabajar con bases de datos. A lo largo de los años, la API de conectividad de bases de datos Java (JDBC) ha evolucionado bastante, y en las últimas dos versiones, ha habido algunos avances importantes.
@@ -19,9 +10,9 @@ Este capítulo cubre los conceptos básicos del uso de JDBC para trabajar con ba
 
 En primer lugar, definimos una base de datos simple llamada apressBooks con dos tablas:  Recipes y publications. El diseño lógico de la base de datos se muestra en la Tabla 12-1 y la Tabla 12-2, caracterizado por el nombre, la longitud, el tipo de datos y las restricciones (es decir, un campo es una clave primaria y otro no debe ser nulo).
 
-![2123f0147378e017e40e661ac613c60c.png](../../../_resources/2123f0147378e017e40e661ac613c60c.png)
+![2123f0147378e017e40e661ac613c60c.png](_resources/2123f0147378e017e40e661ac613c60c.png)
 
-![9a1dd321bcc3237f81a956aa4b793f02.png](../../../_resources/9a1dd321bcc3237f81a956aa4b793f02.png)
+![9a1dd321bcc3237f81a956aa4b793f02.png](_resources/9a1dd321bcc3237f81a956aa4b793f02.png)
 
 Las sentencias SQL para la creación de la base de datos, los permisos y las tablas son las siguientes:
 
@@ -94,18 +85,18 @@ Crear una conexión JDBC implica unos pocos pasos. En primer lugar, debe determi
 
 La documentación de su base de datos para obtener más información. Para nuestro caso (Mysql) , se puede descargar el conector en https://dev.mysql.com/downloads/connector/j/. Asegúrese de que la plataforma seleccionada sea "Independiente de la plataforma": esto es importante para distribuir el software en diferentes sistemas. 
 
-![0a9cb084e7d0c06a1627ac0f46548ba8.png](../../../_resources/0a9cb084e7d0c06a1627ac0f46548ba8.png)
+![0a9cb084e7d0c06a1627ac0f46548ba8.png](_resources/0a9cb084e7d0c06a1627ac0f46548ba8.png)
 
 En la siguiente ventana pinchamos en el texto: 
 > No thanks, just start my download.
 
-![290f0636ce0022ea657df0cb4d059025.png](../../../_resources/290f0636ce0022ea657df0cb4d059025.png)
+![290f0636ce0022ea657df0cb4d059025.png](_resources/290f0636ce0022ea657df0cb4d059025.png)
 
 obtenemos un archivo comprimido que incluye el archivo "mysql-connector-j-8.0.32.jar", la librería que vamos a importar a nuestro proyecto.
 
 Este archivo lo copiamos a la carpeta "lib" de nuestro proyecto, si estamos en VSC.
 
-![edbe536a56974839f8dd66d64f2613e7.png](../../../_resources/edbe536a56974839f8dd66d64f2613e7.png)
+![edbe536a56974839f8dd66d64f2613e7.png](_resources/edbe536a56974839f8dd66d64f2613e7.png)
 
 A continuación, seguimos los siguientes pasos para usar una clase JDBC DriverManager para obtener una conexión a la base de datos.
 
@@ -122,7 +113,7 @@ Paso 2: Carga de los controladores
 
 Para empezar, primero debe cargar el controlador o registrarlo antes de usarlo en el programa. El registro debe hacerse una vez en su programa. Puede registrar un controlador de una de las dos formas que se mencionan a continuación de la siguiente manera:
 
-Class.forName()
+`Class.forName()
 
 
 El código quedaría así:
