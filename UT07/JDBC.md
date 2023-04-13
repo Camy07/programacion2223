@@ -204,3 +204,55 @@ class App {
 }
 ```
 
+Si queremos seguir el patron MVC, podemos crear una clase específica para la conexión a la base de datos que quedaría así:
+
+
+```java
+package modelo;
+
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+
+public class CrearConexion {
+
+    //Parámetros de la conexión
+    private String driver = "jdbc:mysql://";
+    private String host="localhost";
+    private String port="3306";
+    private String database="apressBooks";
+    private String user = "usuario3PAW";
+    private String password = "P@ssw0rd";
+
+    /**
+     * 
+     * Método para conectarnos a la base de datos
+     * @return el ID de la conexión
+     * @throws SQLException
+     */
+    public Connection hazConnection() throws SQLException {
+        Connection con = null;
+
+        // detalles de la conexión (servidor, puerto y base de datos)
+        String urlConexion = driver + host + ":" +
+        port + "/" + database;
+
+        
+        try {
+            // Driver que vamos a usar
+            Class.forName("com.mysql.cj.jdbc.Driver");
+            // conectamos a la base de datos
+            con = DriverManager.getConnection(urlConexion, user, password);
+        } catch (ClassNotFoundException e) {            
+            System.out.println("Error al cargar el driver");
+        }
+
+
+        return con;
+
+    }
+
+
+}
+
+```
