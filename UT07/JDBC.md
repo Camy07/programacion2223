@@ -1,3 +1,5 @@
+# CONEXIÓN A BASE DE DATOS USANDO JDBC
+
 Una base de datos consiste en datos organizados; es decir, los datos en sí y un esquema que proporciona estructuras de datos. Hoy en día, la mayoría de las bases de datos están organizadas en tablas que consisten en filas y columnas. Esta es una forma natural de organizar los datos, y probablemente estés familiarizado con ellos a través del uso de hojas de cálculo. Puede definir las características de la tabla independientemente de los datos reales que va a almacenar en ella. Un campo es un elemento de datos individual dentro de una tabla que corresponde a la intersección de una fila y una columna. Se pueden especificar una o más columnas como claves únicas para identificar a cada empleado. Para este propósito, puede usar una de las columnas mencionadas anteriormente o la combinación de nombre, apellido y fecha de nacimiento. La clave única utilizada  preferentemente sobre las demás se llama la clave principal o primaria de una tabla.
 
 Casi cualquier aplicación no trivial contiene algún tipo de base de datos. Algunas aplicaciones utilizan una base de datos en memoria, mientras que otras utilizan un sistema tradicional de gestión de bases de datos relacionales (RDBMS). En cualquier caso, es esencial que todos los desarrolladores de Java tengan algunas habilidades para trabajar con bases de datos. A lo largo de los años, la API de conectividad de bases de datos Java (JDBC) ha evolucionado bastante, y en las últimas dos versiones, ha habido algunos avances importantes.
@@ -85,7 +87,7 @@ Para la conexión de Java con la base de datos usamos un objeto de conexión JDB
 
 Crear una conexión JDBC implica unos pocos pasos. En primer lugar, debe determinar qué controlador de base de datos necesita. Después de determinar qué controlador necesita, descargue el archivo JAR que contiene ese controlador y colóquelo en su ruta de clase. Cada proveedor de bases de datos proporciona diferentes controladores JDBC empaquetados en archivos JAR con diferentes nombres; consulte
 
-La documentación de su base de datos para obtener más información. Para nuestro caso (Mysql) , se puede descargar el conector en https://dev.mysql.com/downloads/connector/j/. Asegúrese de que la plataforma seleccionada sea "Independiente de la plataforma": esto es importante para distribuir el software en diferentes sistemas. 
+La documentación de su base de datos para obtener más información. Para nuestro caso (Mysql) , se puede descargar el conector en https://dev.mysql.com/downloads/connector/j/. Hay que asegurarse de que la plataforma seleccionada sea "Independiente de la plataforma": esto es importante para distribuir el software en diferentes sistemas. 
 
 ![0a9cb084e7d0c06a1627ac0f46548ba8.png](_resources/0a9cb084e7d0c06a1627ac0f46548ba8.png)
 
@@ -95,6 +97,8 @@ En la siguiente ventana pinchamos en el texto:
 ![290f0636ce0022ea657df0cb4d059025.png](_resources/290f0636ce0022ea657df0cb4d059025.png)
 
 obtenemos un archivo comprimido que incluye el archivo "mysql-connector-j-8.0.32.jar", la librería que vamos a importar a nuestro proyecto.
+
+> Podemos descargar el archivo jar [pichando aqui](https://github.com/joaquinalbares/programacion2223/blob/main/UT07/_resources/mysql-connector-j-8.0.32.jar)
 
 Este archivo lo copiamos a la carpeta "lib" de nuestro proyecto, si estamos en VSC.
 
