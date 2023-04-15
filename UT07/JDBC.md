@@ -104,35 +104,8 @@ Este archivo lo copiamos a la carpeta "lib" de nuestro proyecto, si estamos en V
 
 ![edbe536a56974839f8dd66d64f2613e7.png](_resources/edbe536a56974839f8dd66d64f2613e7.png)
 
-A continuación, seguimos los siguientes pasos para usar una clase JDBC DriverManager para obtener una conexión a la base de datos.
 
-2. Cargamos los controladores mediante el método forName().
-3. Registramos los controladores mediante DriverManager.
-4. Establecemo una conexión mediante el objeto de clase Connection.
-5. Creamos una instrucción.
-6. Ejecutamos la consulta.
-7. Cerramos las conexiones.
-
-Analicemos estos pasos brevemente antes de implementarlos escribiendo código adecuado para ilustrar los pasos de conectividad para JDBC.
-
-### Paso 2: Carga de los controladores
-
-Para empezar, primero debe cargar el controlador o registrarlo antes de usarlo en el programa. El registro debe hacerse una vez en su programa. 
-
-Puede registrar un controlador de una de las dos formas que se mencionan a continuación de la siguiente manera: 
-
-#### A) `Class.forName()`
-
-Aquí cargamos el archivo de clase del controlador en la memoria en tiempo de ejecución. No es necesario utilizar objetos nuevos o creados. En el ejemplo siguiente se utiliza Class.forName() para cargar el controlador de Oracle como se muestra a continuación de la siguiente manera:
-
-`Class.forName(“oracle.jdbc.driver.OracleDriver”);`
-
-#### B) `DriverManager.registerDriver()`
-DriverManager es una clase incorporada de Java con un registro de miembro estático. Aquí llamamos al constructor de la clase driver en tiempo de compilación. En el ejemplo siguiente se utiliza DriverManager.registerDriver() para registrar el controlador de Oracle como se muestra a continuación:
-
-`DriverManager.registerDriver(new oracle.jdbc.driver.OracleDriver())`
-
-### Paso 3: Establecer una conexión mediante el objeto de clase Connection
+### Paso 2: Establecer una conexión mediante el objeto de clase Connection
 
 Después de cargar el controlador, establezca las conexiones como se muestra a continuación de la siguiente manera:
 
@@ -142,29 +115,42 @@ Los elementos de esta instrucción son:
 
 - **user**: Username desde el que se puede acceder a su símbolo del sistema SQL.
 - **password**: contraseña desde la que se puede acceder al símbolo del sistema SQL.
-- **con**: Es una referencia a la interfaz de conexión.
-- **Url**: Localizador uniforme de recursos que se crea como se muestra a continuación:
-`String url = “ jdbc:oracle:thin:@localhost:1521:xe”`
+- **Url**: Localizador uniforme de recursos que se crea como se muestra a continuación: `String url = “ jdbc:mysql:thin:@localhost:1521:xe”` y está compuesto de los siguientes elementos:
+  - `mysql` es la base de datos utilizada, 
+  - `thin` es el controlador utilizado, 
+  - `@localhost` es la dirección IP donde se almacena una base de datos, 
+  - `1521` es el número de puerto 
+  - `xe` es el proveedor de servicios. 
+  
+  Los 3 parámetros anteriores son de tipo String y deben ser declarados por el programador antes de llamar a la función.
+    
+Esta sentencia devuelve un objeto de tipo **con**, una referencia a la interfaz de conexión.
 
-Donde oracle es la base de datos utilizada, thin es el controlador utilizado, @localhost es la dirección IP donde se almacena una base de datos, 1521 es el número de puerto y xe es el proveedor de servicios. Los 3 parámetros anteriores son de tipo String y deben ser declarados por el programador antes de llamar a la función. El uso de esto puede ser referido para formar el código final.
+### Paso 3: Crear una instrucción
 
-### Paso 4: Crear una instrucción
+La interfaz `statement` se utiliza para crear sentencias básicas SQL en Java y proporciona métodos para ejecutar consultas con la base de datos. Hay diferentes tipos de sentencias que se utilizan en JDBC de la siguiente manera:
 
-Una vez que se establece una conexión, podemos interactuar con la base de datos. Las interfaces JDBCStatement, CallableStatement y PreparedStatement definen los métodos que permiten enviar comandos SQL y recibir datos de la base de datos.
-El uso de la instrucción JDBC es el siguiente:
+- Crear instrucción (Create Statement)
+- Declaración preparada (Prepared Statement)
+- Declaración invocable (Callable Statement).
+
+Para nuestro ejemplo, vamos a llamar al método para crear instrucción , que generalmente se usa para el acceso de propósito general a bases de datos y es útil cuando se usan instrucciones SQL estáticas en tiempo de ejecución.
+
+Usando el elemento de conexión del paso anterior, ejecutaremos las siguiente sentencia:
 
 `Statement st = con.createStatement();`
 
-### Paso 5: Ejecutar la consulta
+### Paso 4: Ejecutar la consulta
 
-Ahora viene la parte más importante, es decir, ejecutar la consulta. La consulta aquí es una consulta SQL. Ahora sabemos que podemos tener múltiples tipos de consultas. Algunos de ellos son los siguientes:
+Ahora viene la parte más importante, es decir, ejecutar la consulta. La consulta aquí es una consulta SQL. Una vez creado el objeto Statement, hay tres formas de ejecutar dicha consulta:
 
-- Consulta para actualizar o insertar una tabla en una base de datos.
-- Consulta para recuperar datos.
+- **boolean execute(String SQL)**: Si se recupera el objeto ResultSet, devuelve true o se devuelve false. Se utiliza para ejecutar sentencias [DDL](https://www.geeksforgeeks.org/sql-ddl-dql-dml-dcl-tcl-commands/) de SQL o para SQL dinámico.
+- **int executeUpdate(String SQL)**: Devuelve el número de filas afectadas por la ejecución de la instrucción, que se utiliza cuando se necesita un número para las instrucciones INSERT, DELETE o UPDATE.
+- **ResultSet executeQuery (String SQL)**: Devuelve un objeto ResultSet. Se usa de manera similar a SELECT en SQL.
 
-El método executeQuery() de la interfaz Statement se utiliza para ejecutar consultas de recuperación de valores de la base de datos. Este método devuelve el objeto de ResultSet que se puede utilizar para obtener todos los registros de una tabla.
+Nos centraremos en la tercera de momento, pues solo vamos a recuperar datos de la base de datos. La sentencia sería la siguiente:
 
-El método executeUpdate(sql query) de la interfaz Statement se utiliza para ejecutar consultas de actualización/inserción.
+`ResultSet rs = st.executeQuery(query);`
 
 
 ### Código:
@@ -176,17 +162,16 @@ import java.sql.*;
 
 class App {
     public static void main(String[] args) throws Exception {
-        // detalles de la conexión (servidor y base de datos)
+        // detalles de la conexión (conector, servidor, puerto y base de datos)
         String url = "jdbc:mysql://localhost:3306/apressBooks";
         // Credenciales MySQL
         String username = "usuario3PAW";
         String password = "P@ssw0rd";
-        // Consulta que vamos a ejecutar
-        String query = "select * from publication";
-        // Driver que vamos a usar
-        Class.forName("com.mysql.cj.jdbc.Driver");
+        
+
         Connection con = DriverManager.getConnection(url, username, password);
         System.out.println("Conexión Establecida con éxito");
+        
         Statement st = con.createStatement();
         // Ejecutamos la consulta
         ResultSet rs = st.executeQuery(query);
