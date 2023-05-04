@@ -11,4 +11,4 @@ Se pide completar el ejercicio trabajado en clase con las siguientes caracterís
 - Documentar.
 
 RECURSOS:
-- [MENU para la app](_resources/menu.java)
+- [MENU para la app](_resources/Menu.java)
