@@ -128,15 +128,20 @@ public class Publication {
 
 Como se puede observar, no hay nada referente a conexiones a base de datos, sólo un objeto plano.
 
-Hemos creado el método toString para generar los String que vamos a pasar al controlador y los resulset para pasar a la conexión con la BBDD.
+Hemos creado el método toString para generar los String que vamos a pasar al controlador y los Resultset para pasar a la conexión con la BBDD.
 
 ### 1.3 El Repositorio
 
-Si un POJO representa un elemento de la tabla, necesitamos otra estructura que represente toda la tabla, es decir la colecciión de registros completa. Para ello entra en acción el repositorio, una estructura que organiza la colección de todos los registro de manera transparente al controlador. 
+Si un POJO representa un elemento de la tabla, necesitamos otra estructura que represente toda la tabla, es decir la colección de registros completa. Para ello entra en acción el repositorio, una estructura que organiza la colección de todos los registro de manera transparente al controlador. 
 
-Existen diferentes frameworks que implementan repositorios, pero aquí lo vamos a diseñar 'ad-hoc' para el proyecto actual. Nuestro repositorio va a manejar listas de objetos personas que se cominicarán con la base de datos mendiante la clase 'conexion' creada previamente y con el controlador que veremos más adelante.
+Existen diferentes frameworks que implementan repositorios, pero aquí lo vamos a diseñar 'ad-hoc' para el proyecto actual. Nuestro repositorio va a manejar listas de objetos personas que se comunicarán con la base de datos mediante la clase 'conexion' creada previamente y con el controlador que veremos más adelante.
 
-Asi, nuestro repositorio crearía un 
+Asi, nuestro repositorio crearía un ArrayList de objetos `Publication` y guardaría en cada uno de ellos un registro de la base de datos. Todos los cambios que se hagan en la App, se deberán volcar luego a la base de datos.
+
+La clase `PublicationRepository` debe implementar todas las acciones necesarias para poder hacer un CRUD de la base de datos con garantías.
+
+Un ejemplo sin terminar es el que tenemos a continuación:
+
 
 ```java
 package modelo;
@@ -152,28 +157,48 @@ public class PublicationRepository {
     //La colección de libros de la base de datos
     private ArrayList<Publication> repositorio = 
         new ArrayList<Publication>();
-    
-    private CrearConexion miConexion;
 
-    public PublicationRepository() {
-        
+    //Id del proximo elemento a insertar
+    private int proximoId;
+
+    // nos conectamos a la base de datos
+    CrearConexion miConexion = new CrearConexion();
+
+    public PublicationRepository() {        
         try (Connection conexion = miConexion.hazConnection();
         Statement sentencia = conexion.createStatement();) {
             //sentencia e ejecutar
             String query = "select * from publication";
             //ejecuto la sentencia y guardo el resultado en rs
             ResultSet rs = sentencia.executeQuery(query);
-
+            Integer id=0;
             while (rs.next()) {
-                //Creo un objeto con el resultado actual
-                Publication p = Publication.fromResulSet(rs);
+                //obtengo los datos del resultado
+                String bookTitle = rs.getString("book_title");
+                String publishDate = rs.getString("publish_date");
+                String publishCo = rs.getString("publish_co");
+                id = rs.getInt("id");
+
+                //Lo asigno a un objeto Publication
+                Publication p = new Publication(
+                    id , bookTitle, publishDate,
+                    publishCo
+                );
                 //Lo agregamos a la colección
                 repositorio.add(p);
             }
+			  // obtengo el id del proximo elemento que inserte
+            proximoId = id + 1;
 
         } catch (SQLException e) {
             System.out.println("Error al conectar");
+            e.printStackTrace();
         }
+    }
+
+
+    public int getProximoId() {
+        return proximoId;
     }
 
 
@@ -188,55 +213,346 @@ public class PublicationRepository {
         return p;
     }
 
-    public ArrayList<Publication> buscarPorTitulo (String titulo) {
-        
-        var devolver = new ArrayList<Publication>();
+
+    public ArrayList<Publication> getRepositorio() {
+        return repositorio;
+    }
+    
+    public void insertar(Publication libro) {
+        repositorio.add(libro);
+        proximoId++;
+    }
+
+
+	public void modificar(Integer id , Publication libro) {
+    	// POR HACER
+    }
+    
+    
+
+
+    public void grabarLibro(Publication libro) {
+
+        String query = "";
 
         try (Connection conexion = miConexion.hazConnection();
         Statement sentencia = conexion.createStatement();) {
-            //sentencia e ejecutar
-            String query = "select * from publication where " +
-                "book_title like %" + titulo + "%";
-            //ejecuto la sentencia y guardo el resultado en rs
-            ResultSet rs = sentencia.executeQuery(query);
-
-            while (rs.next()) {
-                //Creo un objeto con el resultado actual
-                Publication p = Publication.fromResulSet(rs);
-                //Lo agregamos a la colección
-                devolver.add(p);
-            }
-            
-
-        } catch (SQLException e) {
-            System.out.println("Error al conectar");
+            query = "INSERT INTO publication VALUES (0 , '" 
+            + libro.getBookTitle() + "' , '" + 
+            libro.getPublishDate()+ "' , '" +
+            libro.getPublishCo() + "')";
+            sentencia.executeUpdate(query);
+            // close connection
+            sentencia.close();            
         }
-        
-        return devolver;
+        catch (Exception e){
+            System.out.println("Error->" + query);
+        }
+
+    }
+
+    public void grabarRepositorio () {
+        try (Connection conexion = miConexion.hazConnection();
+        Statement sentencia = conexion.createStatement();) {
+            String borrado = "TRUNCATE TABLE publication";
+            sentencia.executeUpdate(borrado);
+            // close connection
+            sentencia.close();
+        }
+        catch (Exception e){
+            System.out.println("Error al borrar");
+        }
+        for (Publication libro : repositorio) {
+            grabarLibro(libro);
+        }
+    }
+
+    
+
+}
+```
+
+Para mejorar la ejecución, hemos aprovechado la declaración `try-with-resources`, que permite descargar la gestión de recursos a Java, en lugar de realizar cierres manuales. 
+
+## 2. EL CONTROLADOR
+El controlador se va a encargar de la comunicación entre el modelo y la vista, y en este caso se realizará mediante el siguiente flujo:
+
+- Con el modelo(repositorio) se comunica usando objetos `Publication` o ArrayList de objetos `Publication`.
+- Con la vista (App) se comunica usando `String` o ArrayList de `String`.
+
+Por tanto el controlador debe hacer las conversiones necesarias, asi como la comprobación de los datos recibidos, sin son adecuados y/o válidos y mandar los mensajes correspondientes a la App para que los muestre por pantalla.
+
+Con esta filosofía en mente, el controlador (sin completar) podría tener la siguiente estructura:
+
+```java
+package controlador;
+
+import java.util.ArrayList;
+
+import modelo.Publication;
+import modelo.PublicationRepository;
+
+public class Publicaciones {
+
+    private PublicationRepository repoLibros = new PublicationRepository();
+
+    public String buscarPorId (Integer id) {
+        Publication libro = repoLibros.buscarPorId(id);
+
+        if (libro != null) {
+            return "Libro encontrado -> \n" +
+                libro.toString();
+        } else {
+           return "No se encontró el libro";
+        }
+    }
+
+    public ArrayList<String> buscarPorTitulo(String titulo) {
+        ArrayList<String> lista = new ArrayList<>();
+
+        for (Publication libro: repoLibros.getRepositorio()) {
+            if (libro.getBookTitle().contains(titulo)) {
+                
+                lista.add(libro.toString());
+            }
+        }
+
+        return lista;
+    }
+
+    public void insertaLibro(String titulo , String fecha , String editorial) {
+        int id = repoLibros.getProximoId();
+        var libro = new Publication( id ,titulo, 
+        fecha , editorial);
+        repoLibros.insertar(libro);
+        repoLibros.grabarRepositorio();
+    }
+
+
+    public String modificaLibro( Integer id , String titulo , String fecha , String editorial) {
+        Publication libro_original = repoLibros.buscarPorId(id);
+
+        if (libro_original != null) {
+            var libro = new Publication( id ,titulo,
+                    fecha , editorial);
+            if (repoLibros.modificar(id, libro)) {
+                return "Libro modificado -> \n" +
+                        libro.toString();
+            }
+            else {
+                return "Error al modificar";
+            }
+
+        } else {
+            return "No se encontró el libro";
+        }
+
+    }
+
+    public String borraLibro( Integer id) {
+        Publication libro = repoLibros.buscarPorId(id);
+
+        if (libro != null) {
+            var res = repoLibros.borrar(id);
+            if (res) return "Libro borrado -> \n" +  libro.toString();
+            else return "Error al borrar";
+        } else {
+            return "No se encontró el libro";
+        }
 
     }
 }
 ```
 
+## 3. LA VISTA
+La vista, como sabemos, se comunicará con el controlador para mostrar los datos por pantalla y recibirlos por teclado.
 
+Hará las llamadas correspondientes al controlador enviado y recibiendo  Strings y/o colecciones de Strings.
 
-
-
-
-
-
-
-Para mejorar la ejecución dePodemos aprovechar la declaración `try-with-resources`, que permite descargar la gestión de recursos a Java, en lugar de realizar cierres manuales. El siguiente código muestra cómo usar los recursos `try-with-resources` para abrir una conexión, crear una declaración y luego cerrar tanto la conexión como la instrucción cuando haya terminado.
+La estructura del archivo podría ser la siguiente:
 
 ```java
-try (Connection conn = createConn.getConnection();
-          Statement stmt = conn.createStatement();) {
-    ResultSet rs = stmt.executeQuery(qry);
-    while (rs.next()) {
-        // ACCIONES CON LOS RESULTADOs
+import java.util.ArrayList;
+import java.util.Scanner;
+
+import Vista.Menu;
+import controlador.Publicaciones;
+
+class App {
+    static Scanner sc = new Scanner(System.in);
+
+    static Menu miMenu;
+
+    static int opcion;
+
+    static Publicaciones biblioteca = new Publicaciones();
+    public static void main(String[] args) throws Exception {
+        creaMenu();
+        do {
+            miMenu.verMenu("GESTIÓN DE LIBROS");
+            opcion = miMenu.leerOpcion();
+            switch (opcion) {
+                case 1:
+                    listar();
+                    break;
+                case 2:
+                    buscarPorTitulo();
+                    break;
+                case 3:
+                    insertar();
+                    break;
+                case 4:
+                    modificar();
+                    break;
+                case 5:
+                    borrar();
+                    break;
+                default:
+                    break;
+            }
+        } while (opcion!=0);
     }
-} catch (SQLException e) {
-    e.printStackTrace();
+
+    public static void listar () {
+        var listado = biblioteca.obtenerListado();
+        for (String linea: listado) {
+            System.out.println(linea);
+        }
+
+    }
+    public static void buscarporId() {
+        System.out.print("Escribe el id a buscar: ");
+        int id = Integer.parseInt(sc.nextLine());
+        System.out.println(biblioteca.buscarPorId(id));
+    }
+
+    public static void buscarPorTitulo() {
+        System.out.print("Escribe el titulo a buscar: ");
+        String titulo = sc.nextLine();
+
+        var resultado = biblioteca.buscarPorTitulo(titulo);
+
+        if (resultado.size()>0) {
+            System.out.println("Encontrados " + 
+                resultado.size() + 
+                " resultados:");
+            for (String libro : resultado) {
+                System.out.println(libro);
+            }
+        }
+        else {
+            System.out.println("No se encontró ningún resultado");
+        }
+    }
+
+    public static void insertar() {
+        System.out.println("Escribe el titulo a insertar: ");
+        String tituloL = sc.nextLine();
+
+        System.out.print("Escribe la fecha: ");
+        String fechaL = sc.nextLine();
+
+        System.out.print("Escribe la editorial: ");
+        String editorialL = sc.nextLine();
+
+        biblioteca.insertaLibro(tituloL, fechaL, editorialL);
+    }
+
+
+    public static void borrar () {
+        System.out.print("Escribe el id del libro a borrar: ");
+        Integer id = sc.nextInt();
+        sc.nextLine();
+
+        System.out.println(biblioteca.borraLibro(id));
+    }
+    public static void modificar () {
+        System.out.print("Escribe el id del libro a modificar: ");
+        Integer id = sc.nextInt();
+        sc.nextLine();
+
+        System.out.print("Escribe nuevo titulo: ");
+        String titulo = sc.nextLine();
+
+        System.out.print("Escribe la fecha a modificar: ");
+        String fecha = sc.nextLine();
+
+        System.out.print("Escribe la editorial a modificar: ");
+        String editorial = sc.nextLine();
+
+        System.out.println(biblioteca.modificaLibro(id , titulo, fecha, editorial));
+    }
+
+    private static void creaMenu() {
+        var listaOpciones = new ArrayList<String>();
+        listaOpciones.add("VER LISTADO LIBROS");
+        listaOpciones.add("BUSCAR LIBRO");
+        listaOpciones.add("AÑADIR LIBRO");
+        listaOpciones.add("MODIFICAR LIBRO");
+        listaOpciones.add("BORRAR LIBRO");
+        miMenu = new Menu(listaOpciones);
+
+    }
+}
+```
+
+Para mostrar el menú hemos usado la clase Menu siguiente:
+
+```java
+package Vista;
+
+import java.util.ArrayList;
+import java.util.InputMismatchException;
+import java.util.Scanner;
+
+public class Menu {
+    ArrayList<String> listaOpciones;
+    private final String linea="****************************************************************************";
+
+    public Menu(ArrayList<String> listaOpciones) {
+        this.listaOpciones = listaOpciones;
+    }
+
+    public void verMenu(String titulo) {
+        Integer huecos = linea.length() - titulo.length();
+        Integer mitadA = (huecos/2)-1;
+        Integer mitadB= mitadA;
+        if ( huecos%2 > 0 ) {
+             mitadB = mitadA+1;
+        }
+        System.out.println(linea);
+        System.out.print("*");
+        for (int i=0; i<mitadA ; i++) {
+            System.out.print(" ");
+        }
+        System.out.print(titulo);
+        for (int i=0; i<mitadB ; i++) {
+            System.out.print(" ");
+        }
+        System.out.println("*");
+        System.out.println(linea);
+        int contador = 1;
+        for (String opcion : listaOpciones) {
+            System.out.println(contador + ": " + opcion);
+            contador++;
+        }
+        System.out.println("0: SALIR");
+    }
+
+    public int leerOpcion() {
+        System.out.println("------------------------------");
+        System.out.print("ELIGE TU OPCIÓN: ");
+        Scanner sc = new Scanner(System.in);
+        int opcion = -1;
+        try {
+            var leido = sc.nextLine();
+            opcion = Integer.parseInt(leido);
+        }
+        catch (Exception e) {
+            System.out.println("VALOR NO VÁLIDO");
+        }
+        return opcion;
+    }
 }
 ```
 
