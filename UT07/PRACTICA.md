@@ -9,3 +9,6 @@ Se pide completar el ejercicio trabajado en clase con las siguientes caracterís
 - Crear un menú en la App.
 - Añadir control de errores (excepciones, valores no autorizados , ...)
 - Documentar.
+
+RECURSOS:
+- [MENU para la app](_resources/menu.java)
