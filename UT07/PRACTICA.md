@@ -10,5 +10,7 @@ Se pide completar el ejercicio trabajado en clase con las siguientes caracterís
 - Añadir control de errores (excepciones, valores no autorizados , ...)
 - Documentar.
 
+## FECHA TOPE DE ENTREGA: 14 DE MAYO 22:00h
+
 RECURSOS:
 - [MENU para la app](_resources/Menu.java)
