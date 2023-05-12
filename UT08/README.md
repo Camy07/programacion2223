@@ -16,3 +16,6 @@ Para nuestras aplicaciones gráficas vamos a usar dart y flutter.
   - Para IntelliJ: [https://docs.flutter.dev/get-started/editor?tab=androidstudio](https://docs.flutter.dev/get-started/editor?tab=androidstudio)
   - Para VSCode: [https://docs.flutter.dev/tools/vs-code#installation-and-setup](https://docs.flutter.dev/tools/vs-code#installation-and-setup)
 
+- Ahora ya podemos crear un proyecto nuevo:
+![https://github.com/joaquinalbares/programacion2223/blob/main/UT08/_resources/flutter_project.png]
+
