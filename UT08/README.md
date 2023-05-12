@@ -20,3 +20,5 @@ Para nuestras aplicaciones gráficas vamos a usar dart y flutter.
 
 ![https://github.com/joaquinalbares/programacion2223/blob/main/UT08/_resources/flutter_project.png](https://github.com/joaquinalbares/programacion2223/blob/main/UT08/_resources/flutter_project.png)
 
+![https://github.com/joaquinalbares/programacion2223/blob/main/UT08/_resources/flutter_project_2.png](https://github.com/joaquinalbares/programacion2223/blob/main/UT08/_resources/flutter_project_2.png)
+
