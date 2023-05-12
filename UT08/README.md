@@ -17,5 +17,6 @@ Para nuestras aplicaciones gráficas vamos a usar dart y flutter.
   - Para VSCode: [https://docs.flutter.dev/tools/vs-code#installation-and-setup](https://docs.flutter.dev/tools/vs-code#installation-and-setup)
 
 - Ahora ya podemos crear un proyecto nuevo:
-![https://github.com/joaquinalbares/programacion2223/blob/main/UT08/_resources/flutter_project.png]
+
+![https://github.com/joaquinalbares/programacion2223/blob/main/UT08/_resources/flutter_project.png](https://github.com/joaquinalbares/programacion2223/blob/main/UT08/_resources/flutter_project.png)
 
