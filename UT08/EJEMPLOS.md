@@ -24,7 +24,7 @@ class MyApp extends StatelessWidget {
 
 ### EJEMPLO 02: USANDO Material Design con Scaffold
 
-´´´java
+```java
 import 'package:flutter/material.dart';
 
 void main() {
@@ -50,11 +50,11 @@ class MyApp extends StatelessWidget {
     );
   }
 }
-´´´
+```
 
 ### EJEMPLO 03: USANDO COLUMNAS
 
-´´´java
+```java
 import 'package:flutter/material.dart';
 
 void main() {
@@ -90,7 +90,7 @@ class MyApp extends StatelessWidget {
     );
   }
 }
-´´´
+
 
 
 
