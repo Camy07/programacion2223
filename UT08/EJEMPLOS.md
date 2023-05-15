@@ -52,6 +52,46 @@ class MyApp extends StatelessWidget {
 }
 ´´´
 
+### EJEMPLO 03: USANDO COLUMNAS
+
+´´´java
+import 'package:flutter/material.dart';
+
+void main() {
+  runApp(const MyApp());
+}
+
+class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
+  // This widget is the root of your application.
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: "Mi primera aplicacion",
+      home: Scaffold(
+        appBar: AppBar(title: Text("Mi primera Aplicacion"),
+        backgroundColor: Colors.red),
+        body: Center ( 
+          child: Column (
+          children: const [ 
+            Text("ESTA ES MI PÁGINA" ,
+            style: TextStyle(
+              fontSize: 34,               
+              color: Colors.brown,
+              fontWeight: FontWeight.bold,
+              fontStyle: FontStyle.italic
+            ),
+          ),
+          Text("SEGUNDO TEXTO")]
+        )
+        )
+      )
+    );
+  }
+}
+´´´
+
 
 
 
