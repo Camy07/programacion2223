@@ -1,7 +1,7 @@
 ## EJEMPLOS CON FLUTTER
 
 ### EJEMPLO01: EJEMPLO BÁSICO
-´´´java
+```java
 import 'package:flutter/material.dart';
 
 void main() {
@@ -20,7 +20,7 @@ class MyApp extends StatelessWidget {
     );
   }
 }
-´´´
+
 
 ### EJEMPLO 02: USANDO Material Design con Scaffold
 
