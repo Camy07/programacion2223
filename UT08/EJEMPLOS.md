@@ -20,7 +20,7 @@ class MyApp extends StatelessWidget {
     );
   }
 }
-
+```
 
 ### EJEMPLO 02: USANDO Material Design con Scaffold
 
@@ -76,25 +76,19 @@ class MyApp extends StatelessWidget {
           child: Column (
           children: const [ 
             Text("ESTA ES MI PÁGINA" ,
-            style: TextStyle(
-              fontSize: 34,               
-              color: Colors.brown,
-              fontWeight: FontWeight.bold,
-              fontStyle: FontStyle.italic
+              style: TextStyle(
+                fontSize: 34,
+                color: Colors.brown,
+                fontWeight: FontWeight.bold,
+                fontStyle: FontStyle.italic
+              ),
             ),
-          ),
-          Text("SEGUNDO TEXTO")]
-        )
+            Text("SEGUNDO TEXTO")
+          ])
         )
       )
     );
   }
 }
-
-
-
-
-
-
-
+```
 
