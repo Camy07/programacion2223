@@ -115,12 +115,12 @@ Los elementos de esta instrucción son:
 
 - **user**: Username desde el que se puede acceder a su símbolo del sistema SQL.
 - **password**: contraseña desde la que se puede acceder al símbolo del sistema SQL.
-- **Url**: Localizador uniforme de recursos que se crea como se muestra a continuación: `String url = “ jdbc:mysql:thin:@localhost:1521:xe”` y está compuesto de los siguientes elementos:
+- **Url**: Localizador uniforme de recursos que se crea como se muestra a continuación: `String url = “ jdbc:mysql://localhost:3306/Basededatos”` y está compuesto de los siguientes elementos:
+  - `jdbc` es el conector/driver utilizado, 
   - `mysql` es la base de datos utilizada, 
-  - `thin` es el controlador utilizado, 
-  - `@localhost` es la dirección IP donde se almacena una base de datos, 
-  - `1521` es el número de puerto 
-  - `xe` es el proveedor de servicios. 
+  - `localhost` es la dirección IP donde se almacena una base de datos, 
+  - `3306` es el número de puerto 
+  - `Basededatos` es la base de datos sobre la que vamos a trabajar. 
   
   Los 3 parámetros anteriores son de tipo String y deben ser declarados por el programador antes de llamar a la función.
     
