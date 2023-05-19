@@ -182,7 +182,7 @@ class MyApp extends StatelessWidget {
 ```
 
 
-### EJEMPLO 05  (SIN TERMINAR) : DANDO FUNCIONALIDAD AL BOTÓN
+### EJEMPLO 05  : DANDO FUNCIONALIDAD AL BOTÓN
 
 
 ```java
@@ -200,39 +200,70 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: "Mi primera aplicacion",
-      home: Scaffold(
-        appBar: AppBar(title: Text("Mi primera Aplicacion"),
-        backgroundColor: Colors.red),
-        body: Center ( 
-          child: Column (
-          children: [
-            const Text("ESTA ES MI PÁGINA" ,
-              style: TextStyle(
-                fontSize: 34,
-                color: Colors.brown,
-                fontWeight: FontWeight.bold,
-                fontStyle: FontStyle.italic
-              ),
-            ),
-            const Text("SEGUNDO TEXTO"),
-            Image.network('https://picsum.photos/250?image=9'),
-            ElevatedButton(
-              style: ButtonStyle(
-                foregroundColor: MaterialStateProperty.all<Color>(Colors.lime),
-              ),
-              onPressed: () { AlertDialog(
-                title: const Text('AlertDialog Title'),
-                content: SingleChildScrollView(
-                  child: Text('This is a demo alert dialog.'),
-                ),
-              );},
-              child: Text('TextButton'),
-            )
-          ])
-        )
-      )
+      home: homePage(),
     );
   }
+}
+
+class homePage extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+        appBar: AppBar(title: Text("Mi primera Aplicacion"),
+            backgroundColor: Colors.red),
+        body: Center (
+            child: Column (
+                children: [
+                  const Text("ESTA ES MI PÁGINA" ,
+                    style: TextStyle(
+                        fontSize: 34,
+                        color: Colors.brown,
+                        fontWeight: FontWeight.bold,
+                        fontStyle: FontStyle.italic
+                    ),
+                  ),
+                  const Text("SEGUNDO TEXTO"),
+                  Image.network('https://picsum.photos/250?image=9'),
+                  ElevatedButton(
+                    style: ButtonStyle(
+                      foregroundColor: MaterialStateProperty.all<Color>(Colors.lime),
+                    ),
+                    onPressed: () => showAlertDialog(context),
+                    child: Text('TextButton'),
+                  )
+                ])
+        )
+    );
+  }
+}
+
+
+
+showAlertDialog(BuildContext context) {
+  // Create button
+  Widget okButton = TextButton(
+    child: Text("OK"),
+    onPressed: () {
+      Navigator.of(context).pop();
+    },
+  );
+
+  // Create AlertDialog
+  AlertDialog alert = AlertDialog(
+    title: Text("Simple Alert"),
+    content: Text("This is an alert message."),
+    actions: [
+      okButton,
+    ],
+  );
+
+  // show the dialog
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return alert;
+    },
+  );
 }
 ```
 
