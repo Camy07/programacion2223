@@ -1,0 +1,34 @@
+Pat Gelsinger, el director general de Intel, tiene un plan. 
+Uno muy ambicioso. Durante la entrevista que concedió a The 
+Wall Street Journal a finales de octubre este ejecutivo aseguró 
+que su estrategia a medio plazo en el ámbito de la industria 
+de los chips pasa por tener los mejores transistores y la 
+tecnología de integración más avanzada del mundo en 2025. 
+Esta declaración de intenciones pretende recordarnos que a 
+pesar de los tropezones que ha dado durante los últimos años, 
+Intel sigue aquí. Y tenemos razones bien fundadas para tomarnos 
+esta promesa muy en serio.
+
+Intel prevé tener preparado el nodo Intel 3 para iniciar 
+la fabricación durante el segundo semestre de este año, así 
+como empezar la producción de chips en el nodo Intel 20A 
+(2 nm) durante la primera mitad de 2024. Y, lo que si 
+cabe es más sorprendente, también ha confirmado que durante 
+la segunda mitad del próximo año planea tener listo el nodo 
+litográfico 18A (1,8 nm). No cabe duda de que maneja unos 
+plazos muy ambiciosos, pero acaba de dar a conocer uno de 
+los ingredientes que van a jugar un rol fundamental en sus 
+próximas tecnologías de integración. Ahí va un pequeño 
+espóiler: es una innovación muy relevante.
+Qué es PowerVia y por qué es importante
+
+Un aperitivo para ir abriendo boca: esta innovación 
+estará presente en el nodo litográfico Intel 20A, que, 
+como acabamos de ver, según esta compañía estará listo 
+durante el primer semestre de 2024. No obstante, Intel 
+nos da otro dato importante: PowerVia será un ingrediente 
+fundamental en todos sus procesos litográficos que 
+llegarán en el futuro. De hecho, sin esta innovación 
+difícilmente podría llevar a buen puerto uno de sus 
+objetivos más ambiciosos: tener el primer circuito 
+integrado de un billón de transistores en 2030.
