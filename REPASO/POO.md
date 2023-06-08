@@ -25,7 +25,7 @@ Implementa en java la siguiente jerarquía de clases:
   
    Luego, crea las subclases `Circulo`, `Triángulo`, `Cuadrado` y `Rectangulo` que hereden de `FiguraGeometrica` e implementa el método `calcularArea()` para calcular el área correspondiente a cada figura.
 
-### 5. Productos
+### 5. Productos
 
 Crea un programa con una clase llamada Articulo con los siguientes atributos: 
 
